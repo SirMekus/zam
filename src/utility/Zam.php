@@ -133,6 +133,10 @@ class Zam
 		$nullable = $param["nullable"] ?? false;
 
 		$defaultStatusCode = 422;
+
+		$errorPayload = [
+			'message'=>$invalid, 'target'=>$name
+		];
 		
 		switch($type)
 		{
@@ -141,7 +145,7 @@ class Zam
 			    {
 					if($nullable == false)
 					{
-						$this->response($invalid, $defaultStatusCode);
+						$this->response($errorPayload, $defaultStatusCode);
 				        exit;
 					}
 					else
@@ -161,7 +165,7 @@ class Zam
 			    {
 					if($required != false)
 					{
-						$this->response($invalid, $defaultStatusCode);
+						$this->response($errorPayload, $defaultStatusCode);
 				        exit;
 					}
 					else
@@ -184,7 +188,7 @@ class Zam
 		{
 			if(empty($value))
 			{
-				$this->response($invalid, $defaultStatusCode);
+				$this->response($errorPayload, $defaultStatusCode);
 				exit;
 			}
 		}

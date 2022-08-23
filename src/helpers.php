@@ -43,6 +43,9 @@ function snakeCase($word)
 function getHttpMesssage($code){
     $http = [
             '200'=>"ok",
+            '201'=>"Created",
+            '202'=>"Accepted",
+            '204'=>"No Content",
             '301'=>"Moved Permanently",
             '308'=>"Permanent Redirect",
             '422'=>"Unprocessable Entity",
@@ -51,7 +54,12 @@ function getHttpMesssage($code){
             '404'=>"Not Found",
             '405'=>"Method Not Allowed",
             '500'=>"Internal Server Error",
-            '202'=>"Accepted"
+            '503'=>"Service Unavailable",
+            '406'=>"Not Acceptable",
+            '408'=>"Request Timeout",
+            '411'=>"Length Required",
+            '413'=>"Payload Too Large",
+            '406'=>"Not Acceptable"
     ];
     return isset($http[$code]) ? $http[$code] : "Unknown Status";
 }
