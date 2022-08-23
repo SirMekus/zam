@@ -47,11 +47,13 @@ class Zam
 		if ($ajax)
 		{
 			print_r(json_encode([
-				'message' => is_array($msg) ? json_encode($msg) : $msg
-			]));
+				'message' => $msg
+			], JSON_FORCE_OBJECT));
 	    }
 	    else
 	    {
+			session_start();
+
 			$_SESSION["status"] = $msg;
 
 			if(isset($_SERVER["HTTP_REFERER"]))
