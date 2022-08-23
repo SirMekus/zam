@@ -1,0 +1,22 @@
+{
+    "name": "sirmekus/zam",
+    "description": "A PHP package for handling client requests, sending response, database CRUD operations, among others, easily",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SirMekus",
+            "email": "mekus600@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Sirmekus\\App\\": "src/utility",
+            "Sirmekus\\Database\\": "src/database"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    }
+}
