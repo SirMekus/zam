@@ -85,6 +85,8 @@ require_once 'path_to_vendor/autoload.php';
 return response("There was an error in submission", 419);
 ```
 
+Note that you can also pass an array as argument to this function and it'll be converted to JSON before being sent to client.
+
 ---
 
 ## Database
