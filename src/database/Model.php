@@ -57,7 +57,10 @@ class Model extends MYSQL {
         }
         else
         {
-            include './env.php';
+            $reflection = new \ReflectionClass(\Composer\Autoload\ClassLoader::class);
+            $vendorDir = dirname($reflection->getFileName(), 3);
+            
+            include $vendorDir.'/env.php';
             
             $host = DB_HOST;
             $user = DB_USER;

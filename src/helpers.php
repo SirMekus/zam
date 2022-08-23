@@ -18,7 +18,7 @@ Written By: SIRMEKUS                                                   ¦
                                                                     ¦
 ************************************************************************/
 
-require_once './vendor/autoload.php';
+require_once 'utility/Zam.php';
 
 use Sirmekus\App\Zam;
 
