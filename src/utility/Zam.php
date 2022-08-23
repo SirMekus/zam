@@ -103,16 +103,6 @@ class Zam
     }
 
 
-    // This function cleans inputs then maintain new lines and capitalisations.
-    function new_lines($var)
-    {
-        $trim = trim($var);
-	    $fil = filter_var($trim, FILTER_FLAG_NO_ENCODE_QUOTES);
-	    $add = addslashes($fil);
-	    $new_line = nl2br(htmlspecialchars($add));
-	    return $new_line;
-    }
-
 	/**
      * This takes care of requests coming from client including validation(s) as described by you.
 	 * It takes an array with the following expected properties:
@@ -141,6 +131,8 @@ class Zam
 		
 		//In a situation whereby the key isn't set, it tells us whether to proceed (and return a null value) or exit it.
 		$nullable = $param["nullable"] ?? false;
+
+		$defaultStatusCode = 422;
 		
 		switch($type)
 		{
@@ -149,7 +141,7 @@ class Zam
 			    {
 					if($nullable == false)
 					{
-						$this->response($invalid, 419);
+						$this->response($invalid, $defaultStatusCode);
 				        exit;
 					}
 					else
@@ -169,7 +161,7 @@ class Zam
 			    {
 					if($required != false)
 					{
-						$this->response($invalid, 422);
+						$this->response($invalid, $defaultStatusCode);
 				        exit;
 					}
 					else
@@ -192,7 +184,7 @@ class Zam
 		{
 			if(empty($value))
 			{
-				$this->response($invalid, 422);
+				$this->response($invalid, $defaultStatusCode);
 				exit;
 			}
 		}

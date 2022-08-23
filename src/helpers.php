@@ -41,13 +41,19 @@ function snakeCase($word)
 }
 
 function getHttpMesssage($code){
-    $settings = [
-        'http'=>[
-            '200'=>"ok",'301'=>"Moved Permanently",'308'=>"Permanent Redirect",'422'=>"Unprocessable Entity",'401'=>"unauthorized",'403'=>"forbidden",'404'=>"Not Found",'405'=>"Method Not Allowed",'500'=>"Internal Server Error",'202'=>"Accepted"
-        ]
+    $http = [
+            '200'=>"ok",
+            '301'=>"Moved Permanently",
+            '308'=>"Permanent Redirect",
+            '422'=>"Unprocessable Entity",
+            '401'=>"unauthorized",
+            '403'=>"forbidden",
+            '404'=>"Not Found",
+            '405'=>"Method Not Allowed",
+            '500'=>"Internal Server Error",
+            '202'=>"Accepted"
     ];
-
-    return isset($settings['http'][$code]) ? $settings['http'][$code] : "Unknown Status";
+    return isset($http[$code]) ? $http[$code] : "Unknown Status";
 }
 
 /**

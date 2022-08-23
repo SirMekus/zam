@@ -35,7 +35,7 @@ To get started all you need to do is:
 composer require sirmekus/zam
 ```
 
-and you're in. Please note that if you use Laravel framework then this package may clash with it because there exists functions with similar names as in Laravel.
+and you're in. Please note that if you use Laravel framework then this package may clash with it because there exists functions with similar names as in Laravel. Zam, in Igbo language, means **"Answer Me"** and it does this exactly.
 
 ---
 
