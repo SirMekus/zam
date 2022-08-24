@@ -62,14 +62,16 @@ The possible configuration keys are:
 - `name` : This is the name of the input/request coming from your front end.
 - `required` : Boolean value that indicates whether the expected input must be present. Default is set to `true`.
 - `method` : The expected method that the expected input must follow (between GET and POST). Default is `post`
-- `message` : If present this will be sent back to the client if there is an error.
+- `message` : If present this will be sent back to the client if the `name` is not set or empty.
 - `nullable` : If an expected input isn't set or is empty it tells us whether to proceed with request or throw error to client.
 
-Inputs are sanitized before being passed to your application. Note that this function can also sanitize arrays when passed to it.
+Inputs are sanitized before being passed to your application. Note that this function can also sanitize arrays when passed to it. Validation should be done on client side.
+
+Also, this integrates well with [Zam](https://www.npmjs.com/package/mmuo) package when using AJAX for making request(s) from front end.
 
 ## Response(s)
 
-This will typically be useful to users who use `axios` library as the appropriate HTTP status header will be specified. E.g
+This will typically be useful to users who use `axios` library or [Zam](https://www.npmjs.com/package/mmuo) package as the appropriate HTTP status header will be specified. E.g
 
 ```php
 require_once 'path_to_vendor/autoload.php';
@@ -85,7 +87,30 @@ require_once 'path_to_vendor/autoload.php';
 return response("There was an error in submission", 419);
 ```
 
-Note that you can also pass an array as argument to this function and it'll be converted to JSON before being sent to client.
+>Note that you can also pass an array as argument to this function and it'll be converted to JSON before being sent to client.
+
+The supported HTTP status code you can pass and that can be sent to client are:
+
+- '200'=>"ok",
+- '201'=>"Created",
+- '202'=>"Accepted",
+- '204'=>"No Content",
+- '301'=>"Moved Permanently",
+- '308'=>"Permanent Redirect",
+- '422'=>"Unprocessable Entity",
+- '401'=>"unauthorized",
+- '403'=>"forbidden",
+- '404'=>"Not Found",
+- '405'=>"Method Not Allowed",
+- '500'=>"Internal Server Error",
+- '503'=>"Service Unavailable",
+- '406'=>"Not Acceptable",
+- '408'=>"Request Timeout",
+- '411'=>"Length Required",
+- '413'=>"Payload Too Large",
+- '406'=>"Not Acceptable"
+
+**Only the code is needed to be passed.**
 
 ---
 
@@ -103,18 +128,16 @@ use Sirmekus\Database\Model;
 $model = new Model();
 ```
 
-By default you should create an `env.php` that contains your database configurations. It is from this file that database configuration connection will be called and initialised. You can copy and place this in your root folder:
+By default you should create an `env.php` file that contains your database configurations. It is from this file that database configuration connection will be called and initialised. You should copy and place this in your root folder (with the exact keys):
 
 ```php
-<?php
 define( 'DB_HOST', 'localhost' );
 define( 'DB_NAME', 'your_database_name' );
 define( 'DB_USER', 'your_username' );
 define( 'DB_PASS', 'your_database_password' );
-?>
 ```
 
-However, you can choose to pass these configurations as aruments to the class like so:
+We encourage you to store your core database connection config in a file as suggested above. However, you can choose to pass these configurations as aruments to the class like so:
 
 ```php
 require_once 'path_to_vendor/autoload.php';
@@ -136,10 +159,10 @@ require_once 'path_to_vendor/autoload.php';
 use Sirmekus\Database\Model;
 
 $model = new Model();
-$model->table = "database_table";
+$model->table = "table";
 ```
 
-And finally, you can specify the table to use by extending the `Model` class and giving the class the same name as the table. By default, if none of the above is specified this is used. The **lower case snake-case name** of the class will become the name of the database table to use. Example:
+And finally, you can specify the table to use by extending the `Model` class and giving the class the same name as the table. By default, if none of the above is specified this is used. The **lower-case, snake-case name** of the class will become the name of the database table to use. Example:
 
 ```php
 //Fictious Class => TestTable.php
@@ -151,9 +174,11 @@ use Sirmekus\Database\Model;
 
 class TestTable extends Model
 {
-    //table is 'test_table'
+    //The table name is 'test_table'
 }
+```
 
+```php
 //Now you can use it like you would with the "Model" class => test.php
 require_once 'path_to_vendor/autoload.php';
 
@@ -165,7 +190,7 @@ $model = new TestTable();
 
 You can also, if you don't like our naming convention, set the public `table` property to the name of the table or pass it as argument to any of the CRUD methods. To get the name of your table simply call the `getTable()` method on an instance of `Model` or any class derived from it.
 
-Please note that you should always set the table by passing the name as argument to any of the CRUD method when called or by setting it via the `table` property on an instantiated class if you use the `Model` class directly.
+>Please note that you should always set the table by passing the name as argument to any of the CRUD method when called or by setting it via the `table` property on an instantiated class if you use the `Model` class directly.
 
 ---
 
@@ -252,7 +277,7 @@ $model->update([
 
 - ## **Updating or Creating Record**
 
-Sometimes we will like to update a record if the record/row exists in the database else insert it. You can do this by calling the `updateOrCreate()` method, passing a key-value array specifying the *where* clause - the column(s) and key(s) that makes each record unique - as the first argument; key-value array containing the table's **column-value** as second argument (what should be insert or created); and then an optional `table` as final argument. Example:
+Sometimes we will like to update a record if the record/row exists in the database else insert it. You can do this by calling the `updateOrCreate()` method, passing a key-value array specifying the *where* clause - the column(s) and key(s) that makes each record unique - as the first argument; key-value array containing the table's **column-value** as second argument (what should be inserted or created); and then an optional `table` as final argument. Example:
 
 ```php
 require_once 'path_to_vendor/autoload.php';
@@ -305,12 +330,10 @@ $model = new Model();
 
 $model->select(
     [
-        'column'=>'name, email, phone_number, location',
         'limit'=>20,
         'offset'=>3,
         'orderBy'=>'email',
-        'groupBy'=>'location',
-        'debug'=>'true',
+        'groupBy'=>'location'
     ],
 );
 ```
@@ -341,7 +364,7 @@ $model->select(
 
 The expected array keys in the first argument are optional and they are:
 
-- `column`: A string containing columns to select. If not specified all the columns will be selected.
+- `column`: A string containing columns to select (multiple columns should be coma-delimited). If not specified all the columns will be selected.
 
 - `limit`: An integer containing the `limit` clause
 
@@ -351,7 +374,7 @@ The expected array keys in the first argument are optional and they are:
 
 - `groupBy`: A string containing the name of a particular column the result should be ordered by using the `groupBy` clause
 
-- `debug`: If set or present the crafted query will be echoed to the script for inspection.
+- `debug`: If set or present the crafted query will be echoed in the script for inspection.
 
 ---
 
