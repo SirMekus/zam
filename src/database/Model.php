@@ -139,7 +139,7 @@ class Model extends MYSQL {
 
         if(!empty($configuration) and isset($configuration['groupBy']))
         {
-            $param['groupBy'] = $configuration['groupBy'];
+            $param['group_by'] = $configuration['groupBy'];
         }
 
         if(!empty($configuration) and isset($configuration['debug']))
