@@ -54,7 +54,7 @@ $name = request(["name"=>"name");
 
 $email = request(["name"=>"email", "message"=>"Please provide your email address"]);
 
-$password = request(["name"=>"password", "type"=>"post"]);
+$password = request(["name"=>"password", "method"=>"post"]);
 ```
 
 The possible configuration keys are:
