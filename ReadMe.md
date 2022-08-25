@@ -129,6 +129,8 @@ The supported HTTP status code (and their meanings) you can pass and that can be
 
 ---
 
+With this feature you don't have to craft (complicated) SQL queries in your script anymore and make your code more readable and clean. **Welcome to the OOP way**. 
+
 Using the database feature requires knowledge of our convention. But first, to start using this feature you should import the `Model` class to your script like so:
 
 ```php
@@ -160,7 +162,7 @@ $model = new Model($DB_HOST, $DB_USER, $DB_NAME, $DB_PASS);
 
 ## Passing Name of Table
 
-When using any of the CRUD methods in this class the last argument is always the name of the database table (as you'll soon see below).
+When using any of the CRUD methods in this class the last argument is always the name of the database table (as you'll soon see below). This is one way to always pass the name of the table at runtime.
 
 Another way is by setting the public `table` property to the name of the table. Example:
 
@@ -185,7 +187,7 @@ use Sirmekus\Database\Model;
 
 class TestTable extends Model
 {
-    //The table name is 'test_table'
+    //The table name is 'test_table'. You don't need to add any property or method (unless you wish to add)
 }
 ```
 
@@ -386,6 +388,66 @@ The expected array keys in the first argument are optional and they are:
 - `groupBy`: A string containing the name of a particular column the result should be ordered by using the `groupBy` clause
 
 - `debug`: If set or present the crafted query will be echoed in the script for inspection.
+
+---
+
+- ## **Counting Record**
+
+To count record simply use the `count()` method. The `count()` method works like the `select()` method above but the only possible array key is just the: `column`. Example:
+
+```php
+require_once 'path_to_vendor/autoload.php';
+
+use Sirmekus\Database\Model;
+
+$model = new Model();
+
+$model->count(
+    [
+        'column'=>'name, email, phone_number, location'
+    ]
+);
+```
+
+In the above example, the 'column' is specified. This is useful since you can pass the same config array used in a `select()` method call to the `count()` method so that only the `column` key can be picked (as it is all it needs).
+
+You can also specify a `where` clause via the second argument of the method. Example:
+
+```php
+require_once 'path_to_vendor/autoload.php';
+
+use Sirmekus\Database\Model;
+
+$model = new Model();
+
+$model->count(
+    [
+        'column'=>'name, email, phone_number, location'
+    ],
+    [
+        'email'=>'email@example.com'
+    ]
+);
+```
+
+Or, if without the first argument then it will be:
+
+```php
+require_once 'path_to_vendor/autoload.php';
+
+use Sirmekus\Database\Model;
+
+$model = new Model();
+
+$model->count(
+    null,
+    [
+        'language' => 'php'
+    ]
+);
+```
+
+> Remember that the last argument is the name of the table to query, and it's an optional argument.
 
 ---
 

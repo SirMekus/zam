@@ -162,6 +162,27 @@ class Model extends MYSQL {
         return $user_data;
     }
 
+    public function count($configuration=null, $where=null, $table=null)
+    {
+        $param = [ 'table' => $this->getTable($table), 'db_name'=>$this->database];
+
+        if(!empty($where))
+        {
+            $whereClause = $this->convertToWhereClause($where);
+
+            $param['wheres'] = [$whereClause];
+        }
+
+        if(!empty($configuration) and isset($configuration['column']))
+        {
+            $param['columns'] = [$configuration['column']];
+        }
+
+        $user_data = $this->CountRecord( $param );
+
+        return $user_data;
+    }
+
     public function insert($data, $table=null)
     {
         return $this->create( $this->getTable($table), $this->database, $data );

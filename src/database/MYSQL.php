@@ -356,7 +356,7 @@ class MYSQL
      *
      * @return bool
      */
-    public function Count($params)
+    public function CountRecord($params)
     {
         if (is_array($params)) {
             $table = $params['table'];
@@ -367,25 +367,26 @@ class MYSQL
                 $columns = '*';
             }
 
-            if (!empty($params['wheres'])) {
+            $where = '';
+
+            if (isset($params['wheres']) and !empty($params['wheres'])) {
                 $where = 'WHERE '.implode(' and ', array_values($params['wheres']));
-
-                $sql = "SELECT {$columns} FROM {$table} {$where}";
-
-                $this->db->exec("USE `{$params['db_name']}`");
-
-                $prepare = $this->db->prepare($sql);
-
-                $prepare->execute();
-
-                $count = $prepare->rowCount();
-
-                $prepare->closeCursor();
-
-                return $count;
-            } else {
-                return false;
             }
+
+            $sql = "SELECT {$columns} FROM {$table} {$where}";
+
+            $this->db->exec("USE `{$params['db_name']}`");
+
+            $prepare = $this->db->prepare($sql);
+
+            $prepare->execute();
+
+            $count = $prepare->rowCount();
+
+            $prepare->closeCursor();
+
+            return $count;
+            
         } else {
             return false;
         }
