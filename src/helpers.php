@@ -20,7 +20,11 @@ Written By: SIRMEKUS                                                   ¦
 
 require_once 'utility/Zam.php';
 
+require_once 'utility/Request.php';
+
 use Sirmekus\App\Zam;
+
+use Sirmekus\App\Request;
 
 function snakeCase($word)
 {
@@ -66,7 +70,7 @@ function getHttpMesssage($code){
 
 /**
 * This takes care of requests coming from client including validation(s) as described by you.
-* It takes an array with the following expected properties:
+* It takes an optional array with the following expected properties:
 * 
 * @param array $param; e.g:
 *                       'name' => The actual name of the expected GET or POST input/request
@@ -75,11 +79,11 @@ function getHttpMesssage($code){
 *                       'message' => Error message to send to client if condition(s) are not met
 *                       'nullable' => If an expected input isn't set or is empty it tells us whether to proceed with request or throw error to client
 *
-* @return string|array|null
+* @return string|array|null|object
 */
-function request($msg)
+function request($msg=null)
 {
-    return (new Zam())->request($msg);
+    return empty($msg) ? (new Request()): (new Zam())->request($msg);
 }
 
 function response($msg, $status_code=200)

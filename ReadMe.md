@@ -43,9 +43,9 @@ and you're in. Please note that if you use Laravel framework then this package m
 
 ---
 
-## Accepting Request(s)
+## Receiving/Accepting Request(s)
 
-To accept request you just need to pass a configuration array to the `request()` function as key-value pairs. **Only one key is important to be passed - the NAME key**. E.g:
+To accept request you just need to pass an optional configuration array to the `request()` function as key-value pairs. **Only one key is important to be passed - the NAME key**. E.g:
 
 ```php
 require_once 'path_to_vendor/autoload.php';
@@ -65,9 +65,21 @@ The possible configuration keys are:
 - `message` : If present this will be sent back to the client if the `name` is not set or empty.
 - `nullable` : If an expected input isn't set or is empty it tells us whether to proceed with request or throw error to client.
 
-Inputs are sanitized before being passed to your application. Note that this function can also sanitize arrays when passed to it. Validation should be done on client side.
+Another way to receive input is from client is by calling the `request()` function without any argument then access the expected input as a dynamic property on it. Example:
 
-Also, this integrates well with [Zam](https://www.npmjs.com/package/mmuo) package when using AJAX for making request(s) from front end.
+```php
+require_once 'path_to_vendor/autoload.php';
+
+request()->name; 
+```
+
+>In the above example, if name is set in the form it'll return the value else it returns null.
+
+Inputs are sanitized before being passed to your application. Note that this function can also sanitize arrays when passed to it. Validation should be done on client side including error checks.
+
+Also, this package integrates well with [Zam](https://www.npmjs.com/package/mmuo) package when using AJAX for making request(s) from front end.
+
+---
 
 ## Response(s)
 
@@ -79,36 +91,35 @@ require_once 'path_to_vendor/autoload.php';
 return response("Thank you for using Zam.");
 ```
 
-You can pass an optional parameter as second argument to this function with an HTTP code to send to the user. By default a `200 HTTP status code` is sent to the client. Example:
+You can pass an optional parameter as second argument to this function which is the HTTP status code to send to the client. By default a `200 HTTP status code` is sent to the client. Example:
 
 ```php
 require_once 'path_to_vendor/autoload.php';
 
-return response("There was an error in submission", 419);
+return response("There was an error in submission", 403);
 ```
 
 >Note that you can also pass an array as argument to this function and it'll be converted to JSON before being sent to client.
 
-The supported HTTP status code you can pass and that can be sent to client are:
+The supported HTTP status code (and their meanings) you can pass and that can be sent to client are:
 
-- '200'=>"ok",
-- '201'=>"Created",
-- '202'=>"Accepted",
-- '204'=>"No Content",
-- '301'=>"Moved Permanently",
-- '308'=>"Permanent Redirect",
-- '422'=>"Unprocessable Entity",
-- '401'=>"unauthorized",
-- '403'=>"forbidden",
-- '404'=>"Not Found",
-- '405'=>"Method Not Allowed",
-- '500'=>"Internal Server Error",
-- '503'=>"Service Unavailable",
-- '406'=>"Not Acceptable",
-- '408'=>"Request Timeout",
-- '411'=>"Length Required",
-- '413'=>"Payload Too Large",
-- '406'=>"Not Acceptable"
+- 200=>ok,
+- 201=>Created,
+- 202=>Accepted,
+- 204=>No Content,
+- 301=>Moved Permanently,
+- 308=>Permanent Redirect,
+- 422=>Unprocessable Entity,
+- 401=>unauthorized,
+- 403=>forbidden,
+- 404=>Not Found,
+- 405=>Method Not Allowed,
+- 500=>Internal Server Error,
+- 503=Service Unavailable,
+- 408=>Request Timeout,
+- 411=>Length Required,
+- 413=>Payload Too Large,
+- 406=>Not Acceptable
 
 **Only the code is needed to be passed.**
 
