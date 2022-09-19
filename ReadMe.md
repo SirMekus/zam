@@ -50,7 +50,7 @@ To accept request you just need to pass an optional configuration array to the `
 ```php
 require_once 'path_to_vendor/autoload.php';
 
-$name = request(["name"=>"name");
+$name = request(["name"=>"name"]);
 
 $email = request(["name"=>"email", "message"=>"Please provide your email address"]);
 
@@ -61,11 +61,11 @@ The possible configuration keys are:
 
 - `name` : This is the name of the input/request coming from your front end.
 - `required` : Boolean value that indicates whether the expected input must be present. Default is set to `true`.
-- `method` : The expected method that the expected input must follow (between GET and POST). Default is `post`
+- `method` : The expected method (HTTP verbs: GET, POST, PUT, etc) that the expected input must follow. Default is `POST`
 - `message` : If present this will be sent back to the client if the `name` is not set or empty.
 - `nullable` : If an expected input isn't set or is empty it tells us whether to proceed with request or throw error to client.
 
-Another way to receive input is from client is by calling the `request()` function without any argument then access the expected input as a dynamic property on it. Example:
+Another way to receive input from client is by calling the `request()` function without any argument then access the expected input as a dynamic property on it. Example:
 
 ```php
 require_once 'path_to_vendor/autoload.php';
@@ -78,6 +78,8 @@ request()->name;
 Inputs are sanitized before being passed to your application. Note that this function can also sanitize arrays when passed to it. Validation should be done on client side including error checks.
 
 Also, this package integrates well with [Zam](https://www.npmjs.com/package/mmuo) package when using AJAX for making request(s) from front end.
+
+> Note that you can accept any request with any HTTP verb. However, for requests that don't use the GET, POST or PUT method we encourage you to pass the request in `"REQUEST PAYLOAD"` (JSON) format (instead of Formdata). Also, to verify that the request uses a particular HTTP verb you should check the `$_SERVER['REQUEST_METHOD']`
 
 ---
 

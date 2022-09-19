@@ -19,6 +19,8 @@ Written By: SIRMEKUS                                                   ¦
 ************************************************************************/
 
 namespace Sirmekus\App;
+
+use Sirmekus\App\Request;
 /**
  * Utility Class that takes care of random stuff (can be extended) like form input, generating random numbers, etc..
  *
@@ -34,7 +36,7 @@ namespace Sirmekus\App;
  *
  */
 
-class Zam
+class Zam extends Request
 {
 	//AJAX function Checker to be run if a page was accessed via an ajax call
 	//if AJAX we echo the passed parameter else we just return control to the controller to do whatever
@@ -75,8 +77,13 @@ class Zam
     }
 	
 	// This function formats and sanitize all parameters retrieved from user_input
-    public function sanitize($var)
+    public function sanitize($var=null)
     {
+		if(empty($var))
+		{
+			return null;
+		}
+
 		if(!is_array($var))
 		{
 	        $trim = trim($var);
@@ -110,7 +117,7 @@ class Zam
 	 * It takes an array with the following expected properties:
      *
      * @param array $param; e.g:
-     *                       'name' => The actual name of the expected GET or POST input/request
+     *                       'name' => The actual name of the expected GET, POST, etc input/request
      *                       'required' => Whether the expected input must be present. If not present a redirect or error is thrown
      *                       'method' => The expected method that the expected input must follow
 	 *                       'message' => Error message to send to client if condition(s) are not met
@@ -125,8 +132,8 @@ class Zam
 		//Whether or not we should exit the script if the specified post/get param isn't defined
 		$required = $param["required"] ?? true;
 		
-		//Whether this is a "Get" or "Post" form
-		$type = $param["method"] ?? "post";
+		//Whether this is a "Get", "Put" or "Post" form
+		$method = $param["method"] ?? "post";
 		
 		//The message to echo to the user if the specified form field isn't set or is empty
 		$invalid = $param["message"] ?? "Please enter a valid value";
@@ -134,68 +141,28 @@ class Zam
 		//In a situation whereby the key isn't set, it tells us whether to proceed (and return a null value) or exit it.
 		$nullable = $param["nullable"] ?? false;
 
-		$defaultStatusCode = 422;
-
 		$errorPayload = [
 			'message'=>$invalid, 'target'=>$name
 		];
-		
-		switch($type)
+
+		if(strtoupper($this->method()) != strtoupper($method))
 		{
-			case "post":
-			    if(!isset($_POST[$name]))
-			    {
-					if($nullable == false)
-					{
-						$this->response($errorPayload, $defaultStatusCode);
-				        exit;
-					}
-					else
-					{
-						return null;
-					}
-			    }
-			    else
-			    {
-					$value = $this->sanitize($_POST[$name]);
-				}
-				
-				break;
-				
-			case "get":
-			    if(!isset($_GET[$name]))
-			    {
-					if($required != false)
-					{
-						$this->response($errorPayload, $defaultStatusCode);
-				        exit;
-					}
-					else
-					{
-						return;
-					}
-			    }
-			    else
-			    {
-					$value = $this->sanitize($_GET[$name]);
-				}
-				
-				break;
-				
-			default:
-			    //do nothing
+			$this->response("Unsupported method", 405);
 		}
+
+		$value = $this->sanitize($this->$name);
 		
-		if($required == true)
+		if($required)
 		{
 			if(empty($value))
 			{
-				$this->response($errorPayload, $defaultStatusCode);
-				exit;
+				if(!$nullable)
+				{
+					$this->response($errorPayload, 422);
+				}
 			}
 		}
 		return $value;
 	}
-		
 }
 ?>
