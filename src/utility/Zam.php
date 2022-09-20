@@ -70,47 +70,6 @@ class Zam extends Request
 		exit;
 	}
 
-    function filterStringPolyfill($string)
-    {
-        $str = preg_replace('/\x00|<[^>]*>?/', '', $string);
-        return strip_tags($str);
-    }
-	
-	// This function formats and sanitize all parameters retrieved from user_input
-    public function sanitize($var=null)
-    {
-		if(empty($var))
-		{
-			return null;
-		}
-
-		if(!is_array($var))
-		{
-	        $trim = trim($var);
-			$fil = $this->filterStringPolyfill($trim);
-	        $add = $fil;
-		}
-		else
-		{
-			$add = [];
-			
-			for($i=0;$i<count($var);$i++)
-			{
-	            $trim = trim($var[$i]);
-                $fil = $this->filterStringPolyfill($trim);
-	            
-				if(empty($fil))
-				{
-					continue;
-				}
-                
-			    $add []= $fil;
-			}
-		}
-		
-		return $add;
-    }
-
 
 	/**
      * This takes care of requests coming from client including validation(s) as described by you.
@@ -150,7 +109,7 @@ class Zam extends Request
 			$this->response("Unsupported method", 405);
 		}
 
-		$value = $this->sanitize($this->$name);
+		$value = sanitize($this->$name);
 		
 		if($required)
 		{

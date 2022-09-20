@@ -96,4 +96,45 @@ function dd($message)
     var_dump($message);
     die;
 }
+
+function filterStringPolyfill($string)
+{
+    $str = preg_replace('/\x00|<[^>]*>?/', '', $string);
+    return strip_tags($str);
+}
+
+// This function formats and sanitize all parameters retrieved from user_input
+function sanitize($var=null)
+{
+    if(empty($var))
+    {
+        return null;
+    }
+
+    if(!is_array($var))
+    {
+        $trim = trim($var);
+        $fil = filterStringPolyfill($trim);
+        $add = $fil;
+    }
+    else
+    {
+        $add = [];
+        
+        for($i=0;$i<count($var);$i++)
+        {
+            $trim = trim($var[$i]);
+            $fil = filterStringPolyfill($trim);
+            
+            if(empty($fil))
+            {
+                continue;
+            }
+            
+            $add []= $fil;
+        }
+    }
+    
+    return $add;
+}
 ?>

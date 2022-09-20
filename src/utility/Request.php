@@ -21,8 +21,6 @@ Written By: SIRMEKUS                                                   ¦
 
 namespace Sirmekus\App;
 
-use Sirmekus\App\Zam;
-
 class Request
 {
 
@@ -40,19 +38,17 @@ class Request
 
     public function __get($name)
     {
-        $zam = new Zam();
-
         if (array_key_exists($name, $_GET)) {
-            return $zam->sanitize($_GET[$name]);
+            return sanitize($_GET[$name]);
         } 
         elseif (array_key_exists($name, $_POST)) {
-            return $zam->sanitize($_POST[$name]);
+            return sanitize($_POST[$name]);
         }
         elseif (is_array($this->getPut()) and array_key_exists($name, $this->getPut())) {
-            return $zam->sanitize($this->getPut()[$name]);
+            return sanitize($this->getPut()[$name]);
         }
         elseif (is_array($this->getRequestPayload()) and array_key_exists($name, $this->getRequestPayload())) {
-            return !empty($this->getRequestPayload()[$name]) ? $zam->sanitize($this->getRequestPayload()[$name]) : null;
+            return !empty($this->getRequestPayload()[$name]) ? sanitize($this->getRequestPayload()[$name]) : null;
         } 
         else {
             return null;
@@ -88,7 +84,10 @@ class Request
                 $value = substr($item, $end_key_pos + strlen($end_key), -strlen($end_value));
                 $_PUT[$key] = $value;
             }
-            $GLOBALS["_PUT"] = $_PUT;
+            if(isset($_PUT)){
+                $GLOBALS["_PUT"] = $_PUT;
+            }
+            
         }
         return $GLOBALS["_PUT"];
     }
