@@ -1,6 +1,6 @@
 {
     "name": "sirmekus/zam",
-    "description": "A PHP package for handling client requests, sending response, database CRUD operations, among others, easily",
+    "description": "A PHP package for handling client requests, sending response, among others, easily",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -15,8 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sirmekus\\App\\": "src/utility",
-            "Sirmekus\\Database\\": "src/database"
+            "Sirmekus\\App\\": "src/utility"
         },
         "files": [
             "src/helpers.php"
