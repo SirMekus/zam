@@ -143,9 +143,20 @@ use Sirmekus\Database\Model;
 $model = new Model();
 ```
 
-By default you should create an `env.php` file that contains your database configurations. It is from this file that database configuration connection will be called and initialised. You should copy and place this in your root folder (with the exact keys):
+By default you should create a `.env` (preferred)  or `env.php` file that contains your database configurations. It is from this file that database configuration connection will be called and initialised. You should copy and place this in your root folder (with the exact keys):APP_NAME=Naxum
+
+```.env
+#(.env)
+DB_HOST=Naxum
+DB_NAME=Naxum
+DB_USER=Naxum
+DB_PASS=Naxum
+```
+
+or
 
 ```php
+//(env.php)
 define( 'DB_HOST', 'localhost' );
 define( 'DB_NAME', 'your_database_name' );
 define( 'DB_USER', 'your_username' );

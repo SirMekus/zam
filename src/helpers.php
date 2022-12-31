@@ -26,6 +26,10 @@ use Sirmekus\App\Zam;
 
 use Sirmekus\App\Request;
 
+use Dotenv\Dotenv;
+
+use Dotenv\Exception\InvalidPathException;
+
 function snakeCase($word)
 {
     $newWord = "";
@@ -136,5 +140,25 @@ function sanitize($var=null)
     }
     
     return $add;
+}
+
+function env($key)
+{
+	try
+	{
+	    $dotenv = Dotenv::createImmutable(rootDir());
+	    $dotenv->load();
+	    return isset($_ENV[$key]) ? $_ENV[$key] : null;
+	}
+	catch(InvalidPathException)
+	{
+		return null;
+	}
+}
+
+function rootDir()
+{
+    $reflection = new \ReflectionClass(\Composer\Autoload\ClassLoader::class);
+    return dirname($reflection->getFileName(), 3);
 }
 ?>

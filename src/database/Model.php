@@ -55,12 +55,16 @@ class Model extends MYSQL {
             $database = $database;
             $password = $password;
         }
+        else if(file_exists(rootDir().'/.env'))
+        {
+            $host = env('DB_HOST');
+            $user = env('DB_USER');
+            $database = env('DB_NAME');
+            $password = env('DB_PASS');
+        }
         else
         {
-            $reflection = new \ReflectionClass(\Composer\Autoload\ClassLoader::class);
-            $vendorDir = dirname($reflection->getFileName(), 3);
-            
-            include $vendorDir.'/env.php';
+            include rootDir().'/env.php';
             
             $host = DB_HOST;
             $user = DB_USER;
