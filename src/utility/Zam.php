@@ -54,15 +54,17 @@ class Zam extends Request
 	    }
 	    else
 	    {
-			session_start();
+			if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+
+			$error = $msg["message"] ?? $msg;
 
 			if(empty($session_key))
 			{
-				$_SESSION["status"] = $msg;
+				$_SESSION["status"] = $error;
 			}
 			else
 			{
-				$_SESSION["zam_".$session_key] = $msg;
+				$_SESSION["zam_".$session_key] = $error;
 			}
 
 			if(isset($_SERVER["HTTP_REFERER"]))

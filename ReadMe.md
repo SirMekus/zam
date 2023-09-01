@@ -129,6 +129,40 @@ The supported HTTP status code (and their meanings) you can pass and that can be
 
 ---
 
+## Displaying Response to user(s)
+This package exposes a function called `error()` which accepts the HTML field's name as argument and display any error related to that field as set by the server. E.g:
+
+```php
+//index.php
+<?php
+require_once 'vendor/autoload.php';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+...
+
+<body>
+    <form>
+    ...
+    <div>
+    <label>Name</label>
+    <input type="text" name="name" />
+    <?php if(error('name')) echo error('name'); ?>
+    </div>
+    ...
+    </form>
+
+</body>
+
+</html>
+```
+
+Now if there's an error for the `name` field above it will be displayed accordingly. You can do this for other fields as well by supplying the appropriate name.
+
+---
+
 ## Meanwhile
 
  You can connect with me on [LinkedIn](https://www.linkedin.com/in/sirmekus) for insightful tips and so we can grow our networks together.

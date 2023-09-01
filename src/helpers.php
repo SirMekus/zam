@@ -168,9 +168,11 @@ function error($key)
 
     if(isset($_SESSION['zam_'.$key]))
     {
-        return $_SESSION['zam_'.$key];
+        $msg = $_SESSION['zam_'.$key];
 
         unset($_SESSION['zam_'.$key]);
+
+        return $msg;
     }
 }
 ?>
