@@ -172,7 +172,7 @@ function error($key)
 
         unset($_SESSION['zam_'.$key]);
 
-        return $msg;
+        echo $msg;
     }
 }
 ?>
