@@ -40,7 +40,7 @@ class Zam extends Request
 {
 	//AJAX function Checker to be run if a page was accessed via an ajax call
 	//if AJAX we echo the passed parameter else we just return control to the controller to do whatever
-	public function response($msg, $status_code=200)
+	public function response($msg, $status_code=200, $session_key=null)
 	{
 		$ajax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
 
@@ -56,7 +56,14 @@ class Zam extends Request
 	    {
 			session_start();
 
-			$_SESSION["status"] = $msg;
+			if(empty($session_key))
+			{
+				$_SESSION["status"] = $msg;
+			}
+			else
+			{
+				$_SESSION["zam_".$session_key] = $msg;
+			}
 
 			if(isset($_SERVER["HTTP_REFERER"]))
 			{
@@ -106,7 +113,7 @@ class Zam extends Request
 
 		if(strtoupper($this->method()) != strtoupper($method))
 		{
-			$this->response("Unsupported method", 405);
+			$this->response("Unsupported method", 405, $name);
 		}
 
 		$value = sanitize($this->$name);
@@ -117,7 +124,7 @@ class Zam extends Request
 			{
 				if(!$nullable)
 				{
-					$this->response($errorPayload, 422);
+					$this->response($errorPayload, 422, $name);
 				}
 			}
 		}

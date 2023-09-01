@@ -161,4 +161,16 @@ function rootDir()
     $reflection = new \ReflectionClass(\Composer\Autoload\ClassLoader::class);
     return dirname($reflection->getFileName(), 3);
 }
+
+function error($key)
+{
+    session_start();
+
+    if(isset($_SESSION['zam_'.$key]))
+    {
+        return $_SESSION['zam_'.$key];
+        
+        unset($_SESSION['zam_'.$key]);
+    }
+}
 ?>
