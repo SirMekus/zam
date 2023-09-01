@@ -90,9 +90,9 @@ function request($msg=null)
     return empty($msg) ? (new Request()): (new Zam())->request($msg);
 }
 
-function response($msg, $status_code=200)
+function response($msg, $status_code=200, $session_key=null)
 {
-    return (new Zam())->response($msg, $status_code);
+    return (new Zam())->response($msg, $status_code, $session_key);
 }
 
 function dd($message)
