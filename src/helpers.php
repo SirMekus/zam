@@ -150,7 +150,7 @@ function env($key)
 	    $dotenv->load();
 	    return isset($_ENV[$key]) ? $_ENV[$key] : null;
 	}
-	catch(InvalidPathException)
+	catch(\InvalidPathException $e)
 	{
 		return null;
 	}
